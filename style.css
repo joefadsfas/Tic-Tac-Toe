@@ -75,6 +75,12 @@ div.board {
 div.cell {
     height: auto;
     border: 1px black solid;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 70px;
+    font-weight: bold;
+    padding-bottom: 10px;
 }
 
 
