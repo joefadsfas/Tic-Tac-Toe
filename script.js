@@ -17,11 +17,14 @@ const playerFactory = (name, mark, turn) => {
 }
 
 
-const player1 = playerFactory('Player 1', 'X', true)
-const player2 = playerFactory('Player 2', 'O', false)
+const player1 = playerFactory('Player 1', 'x', true)
+const player2 = playerFactory('Player 2', 'o', false)
+
 
 //FLOW CONTROL
 const displayController = (() => {
+    let winner = false;
+    let winner_name = 'x';
     const board = document.querySelector('.board');
     const turnText = document.querySelector('#turn')
     //display the gameboard
@@ -41,19 +44,23 @@ const displayController = (() => {
             [1, 4, 7],
             [2, 5, 8]
         ]
-        //x_amount = 0
-        //o_amount = 0
-        //for (let i of gameBoard.gameboard) {
-        //    if (i == 'x') {
-        //        x_amount += 1
-        //    }
-        //    else if (i == 'o') {
-        //        o_amount += 1
-        //    }
-        //}
-        //if (x_amount + o_amount == 9) {
-        //    console.log("TIE")
-        //}
+        winCombos.forEach((item, index) => { // [0, 1, 2, 3, 4, 5, 6, 7]
+            if (gameBoard.gameboard[item[0]] === 'x' && gameBoard.gameboard[item[1]] === 'x' && gameBoard.gameboard[item[2]] === 'x') {
+                console.log('player 1winner!');
+                winner = true;
+                winner_name = 'Player 1'
+            }
+            
+            else if (gameBoard.gameboard[item[0]] === 'o' && gameBoard.gameboard[item[1]] === 'o' && gameBoard.gameboard[item[2]] === 'o'){
+                console.log('Player 2 wins')
+                winner = true
+                winner_name = 'Player 2'
+            }
+            else {
+
+            }
+
+        })
     }
 
 
@@ -68,6 +75,7 @@ const displayController = (() => {
                     else {
                         gameBoard.gameboard[child.id] = 'x'
                         display_gameboard()
+                        checkWin()
                         player1.turn = false
                         player2.turn = true
                         turnText.innerHTML = 'Turn: Player 2'
@@ -81,6 +89,7 @@ const displayController = (() => {
                     else {
                         gameBoard.gameboard[child.id] = 'o'
                         display_gameboard()
+                        checkWin()
                         player1.turn = true
                         player2.turn = false
                         turnText.innerHTML = 'Turn: Player 1'
