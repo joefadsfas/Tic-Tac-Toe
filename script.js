@@ -23,8 +23,7 @@ const player2 = playerFactory('Player 2', 'o', false)
 
 //FLOW CONTROL
 const displayController = (() => {
-    let winner = false;
-    let winner_name = 'x';
+    let winner = false
     const board = document.querySelector('.board');
     const turnText = document.querySelector('#turn')
     //display the gameboard
@@ -34,6 +33,7 @@ const displayController = (() => {
 
 
     const checkWin = () => {
+        let takenfield_counter = 0
         const winCombos = [
             [0, 1, 2],
             [3, 4, 5],
@@ -44,23 +44,27 @@ const displayController = (() => {
             [1, 4, 7],
             [2, 5, 8]
         ]
-        winCombos.forEach((item, index) => { // [0, 1, 2, 3, 4, 5, 6, 7]
+        winCombos.forEach((item) => { // [0, 1, 2, 3, 4, 5, 6, 7]
             if (gameBoard.gameboard[item[0]] === 'x' && gameBoard.gameboard[item[1]] === 'x' && gameBoard.gameboard[item[2]] === 'x') {
                 console.log('player 1winner!');
                 winner = true;
-                winner_name = 'Player 1'
             }
             
             else if (gameBoard.gameboard[item[0]] === 'o' && gameBoard.gameboard[item[1]] === 'o' && gameBoard.gameboard[item[2]] === 'o'){
                 console.log('Player 2 wins')
                 winner = true
-                winner_name = 'Player 2'
             }
-            else {
-
-            }
-
         })
+        
+        for (let i of gameBoard.gameboard) {
+            if (i != '') {
+                takenfield_counter += 1
+            }
+        }
+
+        if (winner === false && takenfield_counter === 9) {
+            console.log('its a tie')
+        }
     }
 
 
