@@ -91,3 +91,22 @@ div.cell {
 }
 
 
+.restart {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+
+.restart-btn {
+    z-index: 1;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+}
+
+button:hover {
+    cursor:pointer
+}
+

@@ -1,4 +1,8 @@
 //GAMEBOARD MODULE
+const reset_gameboard = ['', '', '',
+                         '', '', '',
+                         '', '', '']
+
 const gameBoard = (() => {
     const gameboard = 
     ['', '', '',
@@ -23,7 +27,8 @@ const player2 = playerFactory('Player 2', 'o', false)
 
 //FLOW CONTROL
 const displayController = (() => {
-    let winner = false
+    let player1_winner = false
+    let player2_winner = false
     const board = document.querySelector('.board');
     const turnText = document.querySelector('#turn')
     //display the gameboard
@@ -46,25 +51,42 @@ const displayController = (() => {
         ]
         winCombos.forEach((item) => { // [0, 1, 2, 3, 4, 5, 6, 7]
             if (gameBoard.gameboard[item[0]] === 'x' && gameBoard.gameboard[item[1]] === 'x' && gameBoard.gameboard[item[2]] === 'x') {
-                console.log('player 1winner!');
-                winner = true;
+                turnText.innerHTML = 'PLAYER 1 WINS!'
+                player1_winner = true;
             }
             
             else if (gameBoard.gameboard[item[0]] === 'o' && gameBoard.gameboard[item[1]] === 'o' && gameBoard.gameboard[item[2]] === 'o'){
-                console.log('Player 2 wins')
-                winner = true
+                turnText.innerHTML = 'PLAYER 2 WINS!'
+                player2_winner = true
             }
         })
-        
+
+
         for (let i of gameBoard.gameboard) {
             if (i != '') {
                 takenfield_counter += 1
             }
         }
 
-        if (winner === false && takenfield_counter === 9) {
-            console.log('its a tie')
+        if (player1_winner === false && player2_winner === false && takenfield_counter === 9) {
+            turnText.innerHTML = "IT'S A TIE!"
         }
+    }
+
+
+    const restartGame = () => {
+        const restart_btn = document.querySelector('.restart-btn')
+
+        restart_btn.addEventListener('click', () => {
+            gameBoard.gameboard = ['', '', '',
+                                   '', '', '',
+                                   '', '', '']
+            display_gameboard()
+            player1_winner = false;
+            player2_winner = false;
+            player1.turn = true;
+            turnText.innerHTML = 'Turn: Player1'
+        })
     }
 
 
@@ -72,34 +94,37 @@ const displayController = (() => {
     const playerMark = () => {
         for(let child of board.children) {
             child.addEventListener('click', () => {
-                if (player1.turn === true) {
-                    if (gameBoard.gameboard[child.id] != ''){
-                        gameBoard.gameboard[child.id] != ''
+                if (player1_winner === false && player2_winner === false){
+                    if (player1.turn === true) {
+                        if (gameBoard.gameboard[child.id] != ''){
+                            gameBoard.gameboard[child.id] != ''
+                        }
+                        else {
+                            gameBoard.gameboard[child.id] = 'x'
+                            display_gameboard()
+                            player1.turn = false
+                            player2.turn = true
+                            turnText.innerHTML = 'Turn: Player 2'
+                            checkWin()
+                            restartGame()
+                        }
+
                     }
-                    else {
-                        gameBoard.gameboard[child.id] = 'x'
-                        display_gameboard()
-                        checkWin()
-                        player1.turn = false
-                        player2.turn = true
-                        turnText.innerHTML = 'Turn: Player 2'
+                    else if (player2.turn === true) {
+                        if (gameBoard.gameboard[child.id] != ''){
+                            gameBoard.gameboard[child.id] != ''
+                        }
+                        else {
+                            gameBoard.gameboard[child.id] = 'o'
+                            display_gameboard()
+                            player1.turn = true
+                            player2.turn = false
+                            turnText.innerHTML = 'Turn: Player 1'
+                            checkWin()
+                            restartGame()
+                        }}
+
                     }
-                    
-                }
-                else if (player2.turn === true) {
-                    if (gameBoard.gameboard[child.id] != ''){
-                        gameBoard.gameboard[child.id] != ''
-                    }
-                    else {
-                        gameBoard.gameboard[child.id] = 'o'
-                        display_gameboard()
-                        checkWin()
-                        player1.turn = true
-                        player2.turn = false
-                        turnText.innerHTML = 'Turn: Player 1'
-                    }
-                    
-                }
             })
         }
     }
@@ -107,10 +132,12 @@ const displayController = (() => {
     return {
         display_gameboard,
         playerMark,
-        checkWin
+        checkWin,
+        restartGame
     }
 })();
 
 displayController.display_gameboard()
 displayController.playerMark()
 displayController.checkWin()
+displayController.restartGame()
